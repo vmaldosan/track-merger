@@ -3,10 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.vmaldosan</groupId>
 	<artifactId>track-merger</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 
 	<properties>
-		<!-- <version.jackson.core>2.8.3</version.jackson.core> -->
 		<version.jackson-dataformat-xml>2.6.3</version.jackson-dataformat-xml>
 		<version.woodstox-core-asl>4.4.1</version.woodstox-core-asl>
 	</properties>
@@ -19,8 +18,6 @@
 	</scm>
 
 	<dependencies>
-		<!-- <dependency> <groupId>com.fasterxml.jackson.core</groupId> <artifactId>jackson-core</artifactId> 
-			<version>${version.jackson.core}</version> </dependency> -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-xml</artifactId>
