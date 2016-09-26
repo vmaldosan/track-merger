@@ -2,10 +2,10 @@ package service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.AnnotationIntrospector;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.introspect.AnnotationIntrospectorPair;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
@@ -21,8 +21,7 @@ public class MergerService {
 
 	public MergerService() {
 		mapper = new XmlMapper();
-		// mapper.setSerializationInclusion(Include.NON_NULL);
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 		AnnotationIntrospector primary = new JacksonAnnotationIntrospector();
 		AnnotationIntrospector secondary = new JaxbAnnotationIntrospector(mapper.getTypeFactory());
@@ -31,23 +30,33 @@ public class MergerService {
 		mapper.setAnnotationIntrospector(pair);
 	}
 
+	/**
+	 * @param fileName - Assumed not null.
+	 * @return TrainingCenterDatabaseT - Bean with the 
+	 */
 	public TrainingCenterDatabaseT deserializeTrackFile(String fileName) {
 		TrainingCenterDatabaseT beanFromXml = null;
 		try {
 			beanFromXml = mapper.readValue(new File(fileName), TrainingCenterDatabaseT.class);
 
 			System.out.println(beanFromXml.toString());
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (JsonParseException jpe) {
+			jpe.printStackTrace();
+
+		} catch (JsonMappingException jme) {
+			jme.printStackTrace();
+
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
 		}
 
 		return beanFromXml;
+	}
+
+	/**
+	 * @param files - list of tcx files to merge. Assumed not null or empty.
+	 */
+	public void mergeTcxFiles(List<String> files) {
+		
 	}
 }

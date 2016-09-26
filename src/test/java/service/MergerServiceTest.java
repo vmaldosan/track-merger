@@ -16,13 +16,16 @@ public class MergerServiceTest {
 	}
 
 	@Test
-	public void testDeserializeFile() {
+	public void testDeserializeFileSimple() {
 		TrainingCenterDatabaseT beanFromXml = mergerService
 				.deserializeTrackFile("src/test/resources/test.tcx");
 
 		Assert.assertNotNull("Null bean,", beanFromXml);
 		Assert.assertEquals("Deserialized bean not from the expected class,",
 				beanFromXml.getClass(), TrainingCenterDatabaseT.class);
+		Assert.assertNotNull("Activities should not be null,", beanFromXml.getActivities());
+		Assert.assertEquals("Ids do not match,", "2016-09-25T11:40:17.000Z", beanFromXml
+				.getActivities().getActivity().get(0).getId().toString());
 	}
 
 }
