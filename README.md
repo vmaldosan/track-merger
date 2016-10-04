@@ -23,15 +23,14 @@ Important: if you were looking for a tool to "magically improve" your results so
 ### Requirements
 - Java SE 6+: to execute jar file.
 
-## Usage
-Whenever a stable is ready, an executable jar file (with all its dependencies) will be available for downloading. Then you can put the TCX files you want to merge in the same directory and execute the jar file via command line, like this:
+### Usage
+Whenever a stable version is ready, an executable jar file (with all its dependencies) will be available for downloading. Then you can put the TCX files you want to merge in the same directory and execute the jar file via command line, like this:
 ```
 java -jar track-merger.jar --merge [-f <tcx_file_1> <tcx_file_2> ... [<tcx_file_n>]] [-d <destination_file>]
 ```
-
-If no tcx files are specified, current dir will be searched for them.
-If option -f is specified, at least two file names need to be provided right after it.
-If no destinantion file is specified, it will be saved in the current dir as "merged.tcx".
+- If no tcx files are specified, current dir will be searched for them.
+- If option -f is specified, at least two file names need to be provided right after it.
+- If no destinantion file is specified, it will be saved in the current dir as "merged.tcx".
 
 ## Dev manual
 Simply clone or zip this repo. You can generate the jar file with a `mvn package`.
