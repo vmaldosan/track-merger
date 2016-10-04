@@ -6,4 +6,6 @@ public final class Utils {
 	}
 
 	public static final String LONG_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+
+	public static final String DEFAULT_DEST = "merged.tcx";
 }

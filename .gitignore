@@ -16,5 +16,8 @@ hs_err_pid*
 
 /target
 
-# generated beans from scheme
+# generated beans from schema
 **/com/garmin/*
+
+# maven-shade-plugin
+dependency-reduced-pom.xml

@@ -1,62 +1,22 @@
 package service;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.AnnotationIntrospector;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.introspect.AnnotationIntrospectorPair;
-import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
+import com.garmin.xmlschemas.trainingcenterdatabase.v2.ActivityT;
 import com.garmin.xmlschemas.trainingcenterdatabase.v2.TrainingCenterDatabaseT;
 
+public interface MergerService {
 
-public class MergerService {
+	void addDistanceToActivityTracks(Double distance, ActivityT activity);
 
-	// TODO: make it Singleton.
-	private XmlMapper mapper;
+	TrainingCenterDatabaseT deserializeTrackFile(String fileName);
 
-	public MergerService() {
-		mapper = new XmlMapper();
-		// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+	Double getLastValidDistance(TrainingCenterDatabaseT training);
 
-		AnnotationIntrospector primary = new JacksonAnnotationIntrospector();
-		AnnotationIntrospector secondary = new JaxbAnnotationIntrospector(mapper.getTypeFactory());
+	File mergeTcxFiles(List<String> fileNames, String destination);
 
-		AnnotationIntrospector pair = AnnotationIntrospectorPair.create(primary, secondary);
-		mapper.setAnnotationIntrospector(pair);
-	}
+	void removeZeroDistanceTracks(TrainingCenterDatabaseT training);
 
-	/**
-	 * @param fileName - Assumed not null.
-	 * @return TrainingCenterDatabaseT - Bean with the 
-	 */
-	public TrainingCenterDatabaseT deserializeTrackFile(String fileName) {
-		TrainingCenterDatabaseT beanFromXml = null;
-		try {
-			beanFromXml = mapper.readValue(new File(fileName), TrainingCenterDatabaseT.class);
-
-			System.out.println(beanFromXml.toString());
-		} catch (JsonParseException jpe) {
-			jpe.printStackTrace();
-
-		} catch (JsonMappingException jme) {
-			jme.printStackTrace();
-
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-
-		return beanFromXml;
-	}
-
-	/**
-	 * @param files - list of tcx files to merge. Assumed not null or empty.
-	 */
-	public void mergeTcxFiles(List<String> files) {
-		
-	}
+	File serializeTrackFile(TrainingCenterDatabaseT training, String fileName);
 }
