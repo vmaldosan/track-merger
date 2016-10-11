@@ -1,6 +1,5 @@
 package service;
 
-import java.io.File;
 import java.util.List;
 
 import com.garmin.xmlschemas.trainingcenterdatabase.v2.ActivityT;
@@ -14,9 +13,9 @@ public interface MergerService {
 
 	Double getLastValidDistance(TrainingCenterDatabaseT training);
 
-	File mergeTcxFiles(List<String> fileNames, String destination);
+	void mergeTcxFiles(List<String> fileNames, String destination);
 
 	void removeZeroDistanceTracks(TrainingCenterDatabaseT training);
 
-	File serializeTrackFile(TrainingCenterDatabaseT training, String fileName);
+	void serializeTrackFile(TrainingCenterDatabaseT training, String fileName);
 }

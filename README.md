@@ -1,22 +1,34 @@
 # track-merger
 Work in progress!!
-Version: 0.0.4-SNAPSHOT
+Current version: 0.1.0-SNAPSHOT
 
-Simple tool to merge several TCX files, which is the standard format to track sport activities by Garmin, Fitbit, etc.
+Simple tool to merge several TCX (Training Centre XML) files, which is the standard format to track sport activities by Garmin, Fitbit, etc.
 
 ## Mission
-This project has simple mission: to fix those times when you are performing an activity using your Garmin/Fitbit/whatever-device-that-generates-tcx-files and it stopped by mistake. As a result you'll have two or more activities, when there should be only one. This would merge all those TCX files into one, so you can upload it to any other activity tracker of your choice (Runtastic, Endomondo, etc).
+This project has a simple goal: to fix those times when you are performing an activity using your Garmin/Fitbit/whatever-device-that-generates-tcx-files and it stopped by mistake. As a result you'll have two or more activities, when there should be only one. This would merge all those TCX files into one, so you can upload it to any activity tracker that accepts this format (Runtastic, Endomondo, etc).
 
 Important: if you were looking for a tool to "magically improve" your results so you can brag about it, sorry, this software won't do that. :running:
 
-## TODO
+## TODO until version 1.0.0-RELEASE
 1. ~~Deserialize activity files.~~
 2. ~~Remove 0 distance points from the last lap of every Activity.~~
 3. ~~Get last valid distance of first training.~~
 4. ~~Add last valid distance to all successive Trainings.~~
 5. ~~Merge all Activities into the first Training.~~
-6. Serialize bean into TCX file.
-7. Tyding-up the code.
+6. Serialize bean into TCX file: 0.1.0-SNAPSHOT
+    * ~~Write activity into file.~~
+    * ~~Write full datetimes (currently epoch timestamps).~~
+    * ~~Indent output file.~~
+    * ~~Ignore empty fields.~~
+    * ~~Fix root element.~~
+7. Improve deserialization: 0.2.0-SNAPSHOT
+    * Ignore case when reading literals<sup>(1)</sup>.
+    * Read `Creator` element<sup>(2)</sup>.
+8. Tyding-up the code.
+
+    <sup>(1)</sup> Currently if TCX files contain literals like "Running" and "Active", deserialization throws errors, so files need to be preprocessed to make those literals uppercase.
+
+    <sup>(2)</sup> Jackson raises an error when reading `<Creator>` element, which is placed after all the laps.
 
 ## User manual
 
@@ -39,7 +51,6 @@ Simply clone or zip this repo. You can generate the jar file with a `mvn package
 - Jackson Dataformat XML: to process TCX files.
 - Woodstox: helps performance of Jackson.
 - JUnit: unit tests.
-- Java EE Dependency Injection: (self-explanatory, might switch to Spring 4).
 
 ## How to generate required Java beans
 For now I've decided to generate the Java beans from the Garmin schema (xsd file provided in the `src/main/resources/xsd` directory) using JAXB. To do this, run `xjc -d ../../java TrainingCenterDatabasev2.xsd` from the preferred command line, inside the _src/main/resources/xsd_ directory (if you're on Windows, remember to swap the / to \\).

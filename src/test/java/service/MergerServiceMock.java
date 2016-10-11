@@ -1,9 +1,6 @@
 package service;
 
-import java.io.File;
 import java.util.List;
-
-import utils.Utils;
 
 import com.garmin.xmlschemas.trainingcenterdatabase.v2.ActivityT;
 import com.garmin.xmlschemas.trainingcenterdatabase.v2.TrainingCenterDatabaseT;
@@ -29,8 +26,8 @@ public class MergerServiceMock implements MergerService {
 	}
 
 	@Override
-	public File mergeTcxFiles(List<String> fileNames, String destination) {
-		return new File(Utils.DEFAULT_DEST);
+	public void mergeTcxFiles(List<String> fileNames, String destination) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -40,9 +37,8 @@ public class MergerServiceMock implements MergerService {
 	}
 
 	@Override
-	public File serializeTrackFile(TrainingCenterDatabaseT training, String fileName) {
+	public void serializeTrackFile(TrainingCenterDatabaseT training, String fileName) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
