@@ -14,20 +14,23 @@ import service.MergerService;
 import utils.Utils;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.AnnotationIntrospector;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier;
 import com.fasterxml.jackson.databind.introspect.AnnotationIntrospectorPair;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 import com.garmin.xmlschemas.trainingcenterdatabase.v2.ActivityLapT;
 import com.garmin.xmlschemas.trainingcenterdatabase.v2.ActivityT;
 import com.garmin.xmlschemas.trainingcenterdatabase.v2.TrackpointT;
 import com.garmin.xmlschemas.trainingcenterdatabase.v2.TrainingCenterDatabaseT;
+import com.sun.xml.internal.ws.util.StringUtils;
 
 public class MergerServiceImpl implements MergerService {
 
@@ -35,7 +38,31 @@ public class MergerServiceImpl implements MergerService {
 
 	@Inject
 	public MergerServiceImpl() {
-		mapper = new XmlMapper();
+		JacksonXmlModule module = new JacksonXmlModule();
+
+		module.setDeserializerModifier(new BeanDeserializerModifier() {
+			@Override
+			public JsonDeserializer<Enum> modifyEnumDeserializer(
+					DeserializationConfig config, final JavaType type, BeanDescription beanDesc,
+					final JsonDeserializer<?> deserializer) {
+				return new JsonDeserializer<Enum>() {
+					@Override
+					public Enum deserialize(JsonParser jp, DeserializationContext ctxt)
+							throws IOException {
+						Class<? extends Enum> rawClass = (Class<Enum<?>>) type.getRawClass();
+						return Enum.valueOf(rawClass, jp.getValueAsString().toUpperCase());
+					}
+				};
+			}
+		});
+		module.addSerializer(Enum.class, new StdSerializer<Enum>(Enum.class) {
+			@Override
+			public void serialize(Enum value, JsonGenerator jgen, SerializerProvider provider)
+					throws IOException {
+				jgen.writeString(StringUtils.capitalize(value.name().toLowerCase()));
+			}
+		});
+		mapper = new XmlMapper(module);
 
 		AnnotationIntrospector primary = new JacksonAnnotationIntrospector();
 		AnnotationIntrospector secondary = new JaxbAnnotationIntrospector(mapper.getTypeFactory());
@@ -45,6 +72,8 @@ public class MergerServiceImpl implements MergerService {
 
 		SimpleDateFormat sdf = new SimpleDateFormat(Utils.LONG_DATE_FORMAT);
 		mapper.setDateFormat(sdf);
+
+		// Deserialization options.
 		mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
 		mapper.setSerializationInclusion(Include.NON_NULL);
 	}
@@ -56,7 +85,7 @@ public class MergerServiceImpl implements MergerService {
 	 * @return TrainingCenterDatabaseT - Bean with the
 	 */
 	@Override
-	public TrainingCenterDatabaseT deserializeTrackFile(String fileName) {
+	public TrainingCenterDatabaseT deserializeTrainingFile(String fileName) {
 		TrainingCenterDatabaseT beanFromXml = null;
 		try {
 			beanFromXml = mapper.readValue(new File(fileName), TrainingCenterDatabaseT.class);
@@ -124,9 +153,9 @@ public class MergerServiceImpl implements MergerService {
 	 * @param fileName
 	 */
 	@Override
-	public void serializeTrackFile(TrainingCenterDatabaseT training, String fileName) {
+	public void serializeTrainingFile(TrainingCenterDatabaseT training, String fileName) {
 		File destination = new File(fileName);
-		ObjectWriter writer = mapper.writer().withRootName("TrainingCenterDatabase");
+		ObjectWriter writer = mapper.writer().withRootName(Utils.ROOT_NAME);
 
 		try (FileOutputStream fos = new FileOutputStream(destination)) {
 			fos.write(writer.writeValueAsBytes(training));
@@ -151,7 +180,7 @@ public class MergerServiceImpl implements MergerService {
 		// 1. Deserialize activity files.
 		List<TrainingCenterDatabaseT> trainings = new ArrayList<TrainingCenterDatabaseT>();
 		for (String fileName : fileNames) {
-			trainings.add(deserializeTrackFile(fileName));
+			trainings.add(deserializeTrainingFile(fileName));
 		}
 		// 2. Remove 0 distance points from the last lap of every Activity.
 		for (TrainingCenterDatabaseT training : trainings) {
@@ -162,9 +191,7 @@ public class MergerServiceImpl implements MergerService {
 		Double distanceWhenInterrupted = getLastValidDistance(trainings.get(0));
 
 		TrainingCenterDatabaseT firstTraining = trainings.get(0);
-
-		int numTrainings = trainings.size();
-		for (int i = 1; i < numTrainings; i++) {
+		for (int i = 1, numTrainings = trainings.size(); i < numTrainings; i++) {
 			// 4. Add last valid distance to all successive Trainings.
 			ActivityT activity = trainings.get(i).getActivities().getActivity().get(0);
 			addDistanceToActivityTracks(distanceWhenInterrupted, activity);
@@ -174,6 +201,6 @@ public class MergerServiceImpl implements MergerService {
 		}
 
 		// 6. Serialize bean into TCX file.
-		serializeTrackFile(firstTraining, destination);
+		serializeTrainingFile(firstTraining, destination);
 	}
 }

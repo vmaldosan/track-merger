@@ -27,22 +27,22 @@ public class MergerServiceTest {
 	}
 
 	@Test
-	public void testDeserializeFile_simple() {
+	public void testDeserializeFile() {
 		TrainingCenterDatabaseT training = mergerService
-				.deserializeTrackFile("src/test/resources/test.tcx");
+				.deserializeTrainingFile("src/test/resources/test.tcx");
 
 		assertNotNull("Null bean,", training);
 		assertEquals("Deserialized bean not from the expected class,", training.getClass(),
 				TrainingCenterDatabaseT.class);
 		assertNotNull("Activities should not be null,", training.getActivities());
-		assertEquals("Ids do not match,", "2016-09-25T11:40:17.000Z", training.getActivities()
+		assertEquals("Ids do not match,", "2016-09-25T11:25:34.000Z", training.getActivities()
 				.getActivity().get(0).getId().toString());
 	}
 
 	@Test
 	public void testRemoveZeroDistanceTracks() {
 		TrainingCenterDatabaseT training = mergerService
-				.deserializeTrackFile("src/test/resources/activity1.tcx");
+				.deserializeTrainingFile("src/test/resources/activity1.tcx");
 		assertNotNull("Null bean,", training);
 
 		mergerService.removeZeroDistanceTracks(training);
@@ -60,7 +60,7 @@ public class MergerServiceTest {
 	@Test
 	public void testGetLastValidDistance() {
 		TrainingCenterDatabaseT training = mergerService
-				.deserializeTrackFile("src/test/resources/activity2.tcx");
+				.deserializeTrainingFile("src/test/resources/activity2.tcx");
 		assertNotNull("Null bean,", training);
 
 		double d = mergerService.getLastValidDistance(training);
@@ -70,7 +70,7 @@ public class MergerServiceTest {
 	@Test
 	public void testAddDistanceToActivity() {
 		TrainingCenterDatabaseT training = mergerService
-				.deserializeTrackFile("src/test/resources/activity2.tcx");
+				.deserializeTrainingFile("src/test/resources/activity2.tcx");
 		assertNotNull("Null bean,", training);
 
 		// Add 1 Km to every lap.
@@ -91,10 +91,10 @@ public class MergerServiceTest {
 	@Test
 	public void testSerializeTrackFile_defaultDest() {
 		TrainingCenterDatabaseT training = mergerService
-				.deserializeTrackFile("src/test/resources/activity2.tcx");
+				.deserializeTrainingFile("src/test/resources/activity2.tcx");
 		assertNotNull("Null bean,", training);
 
-		mergerService.serializeTrackFile(training, Utils.DEFAULT_DEST);
+		mergerService.serializeTrainingFile(training, Utils.DEFAULT_DEST);
 
 		File mergedFile = new File(Utils.DEFAULT_DEST);
 		assertTrue("Merged file with default name not found,",

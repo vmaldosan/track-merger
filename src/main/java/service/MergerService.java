@@ -9,7 +9,7 @@ public interface MergerService {
 
 	void addDistanceToActivityTracks(Double distance, ActivityT activity);
 
-	TrainingCenterDatabaseT deserializeTrackFile(String fileName);
+	TrainingCenterDatabaseT deserializeTrainingFile(String fileName);
 
 	Double getLastValidDistance(TrainingCenterDatabaseT training);
 
@@ -17,5 +17,5 @@ public interface MergerService {
 
 	void removeZeroDistanceTracks(TrainingCenterDatabaseT training);
 
-	void serializeTrackFile(TrainingCenterDatabaseT training, String fileName);
+	void serializeTrainingFile(TrainingCenterDatabaseT training, String fileName);
 }

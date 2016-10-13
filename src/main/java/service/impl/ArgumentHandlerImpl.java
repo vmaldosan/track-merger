@@ -52,8 +52,7 @@ public class ArgumentHandlerImpl implements ArgumentHandler {
 		String operation = null;
 		List<String> filesToRead = null;
 		String destination = "";
-		int numArgs = args.length;
-		for (Integer i = 0; i < numArgs; i++) {
+		for (int i = 0, numArgs = args.length; i < numArgs; i++) {
 			if (args[i].substring(0, 1).startsWith("-")) {
 				if (args[i].substring(1, 2).startsWith("-")) {
 					operation = args[i].substring(2);

@@ -1,6 +1,6 @@
 # track-merger
 Work in progress!!
-Current version: 0.1.0-SNAPSHOT
+Current version: 0.1.1-SNAPSHOT
 
 Simple tool to merge several TCX (Training Centre XML) files, which is the standard format to track sport activities by Garmin, Fitbit, etc.
 
@@ -15,16 +15,17 @@ Important: if you were looking for a tool to "magically improve" your results so
 3. ~~Get last valid distance of first training.~~
 4. ~~Add last valid distance to all successive Trainings.~~
 5. ~~Merge all Activities into the first Training.~~
-6. Serialize bean into TCX file: 0.1.0-SNAPSHOT
+6. ~~Serialize bean into TCX file: 0.1.0-SNAPSHOT~~
     * ~~Write activity into file.~~
     * ~~Write full datetimes (currently epoch timestamps).~~
     * ~~Indent output file.~~
     * ~~Ignore empty fields.~~
     * ~~Fix root element.~~
 7. Improve deserialization: 0.2.0-SNAPSHOT
-    * Ignore case when reading literals<sup>(1)</sup>.
+    * ~~Case insensitive when reading literals<sup>(1)</sup>.~~
     * Read `Creator` element<sup>(2)</sup>.
 8. Tyding-up the code.
+    * Check unit test coverage.
 
     <sup>(1)</sup> Currently if TCX files contain literals like "Running" and "Active", deserialization throws errors, so files need to be preprocessed to make those literals uppercase.
 
@@ -49,7 +50,8 @@ Simply clone or zip this repo. You can generate the jar file with a `mvn package
 
 ### Dependencies
 - Jackson Dataformat XML: to process TCX files.
-- Woodstox: helps performance of Jackson.
+- Woodstox: boosts performance of Jackson.
+- Java EE Dependency Injection: (self-explanatory).
 - JUnit: unit tests.
 
 ## How to generate required Java beans

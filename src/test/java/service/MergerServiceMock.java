@@ -14,7 +14,7 @@ public class MergerServiceMock implements MergerService {
 	}
 
 	@Override
-	public TrainingCenterDatabaseT deserializeTrackFile(String fileName) {
+	public TrainingCenterDatabaseT deserializeTrainingFile(String fileName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -37,7 +37,7 @@ public class MergerServiceMock implements MergerService {
 	}
 
 	@Override
-	public void serializeTrackFile(TrainingCenterDatabaseT training, String fileName) {
+	public void serializeTrainingFile(TrainingCenterDatabaseT training, String fileName) {
 		// TODO Auto-generated method stub
 	}
 
