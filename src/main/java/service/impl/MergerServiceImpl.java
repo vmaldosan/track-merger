@@ -37,6 +37,7 @@ public class MergerServiceImpl implements MergerService {
 	private XmlMapper mapper;
 
 	@Inject
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public MergerServiceImpl() {
 		JacksonXmlModule module = new JacksonXmlModule();
 
@@ -56,12 +57,15 @@ public class MergerServiceImpl implements MergerService {
 			}
 		});
 		module.addSerializer(Enum.class, new StdSerializer<Enum>(Enum.class) {
+			private static final long serialVersionUID = 4951133737173200158L;
+
 			@Override
 			public void serialize(Enum value, JsonGenerator jgen, SerializerProvider provider)
 					throws IOException {
 				jgen.writeString(StringUtils.capitalize(value.name().toLowerCase()));
 			}
 		});
+
 		mapper = new XmlMapper(module);
 
 		AnnotationIntrospector primary = new JacksonAnnotationIntrospector();
@@ -73,7 +77,7 @@ public class MergerServiceImpl implements MergerService {
 		SimpleDateFormat sdf = new SimpleDateFormat(Utils.LONG_DATE_FORMAT);
 		mapper.setDateFormat(sdf);
 
-		// Deserialization options.
+		// Serialization options
 		mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
 		mapper.setSerializationInclusion(Include.NON_NULL);
 	}

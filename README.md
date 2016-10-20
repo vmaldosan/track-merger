@@ -27,9 +27,9 @@ Important: if you were looking for a tool to "magically improve" your results so
 8. Tyding-up the code.
     * Check unit test coverage.
 
-    <sup>(1)</sup> Currently if TCX files contain literals like "Running" and "Active", deserialization throws errors, so files need to be preprocessed to make those literals uppercase.
+    <sup>(1)</sup> Currently if TCX files contain literals like _"Running"_ and _"Active"_, deserialization throws errors, so files need to be preprocessed to make those literals uppercase.
 
-    <sup>(2)</sup> Jackson raises an error when reading `<Creator>` element, which is placed after all the laps.
+    <sup>(2)</sup> Jackson raises an error when reading `Creator` element, which is placed after all the laps. This is due to this element being abstract, because there are some elements extending it (to be exact, `Device` and `Application`).
 
 ## User manual
 
@@ -49,12 +49,13 @@ java -jar track-merger.jar --merge [-f <tcx_file_1> <tcx_file_2> ... [<tcx_file_
 Simply clone or zip this repo. You can generate the jar file with a `mvn package`.
 
 ### Dependencies
+- JRE 1.7 as compiler (to use try-with-resources).
 - Jackson Dataformat XML: to process TCX files.
 - Woodstox: boosts performance of Jackson.
 - Java EE Dependency Injection: (self-explanatory).
 - JUnit: unit tests.
 
 ## How to generate required Java beans
-For now I've decided to generate the Java beans from the Garmin schema (xsd file provided in the `src/main/resources/xsd` directory) using JAXB. To do this, run `xjc -d ../../java TrainingCenterDatabasev2.xsd` from the preferred command line, inside the _src/main/resources/xsd_ directory (if you're on Windows, remember to swap the / to \\).
+For now I've decided to generate the Java beans from the Garmin schema (XSD file provided in the `src/main/resources/xsd` directory) using JAXB. To do this, run `xjc -d ../../java TrainingCenterDatabasev2.xsd` from the preferred command line, inside the _src/main/resources/xsd_ directory (if you're on Windows, remember to swap the / to \\).
 
-In the future I might consider another method that involves Jackson exclusively. Opened to suggestions :eyeglasses:
+In the future I might consider another method that involves Jackson exclusively. Opened to suggestions! :eyeglasses:
