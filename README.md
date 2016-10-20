@@ -1,6 +1,6 @@
 # track-merger
 Work in progress!!
-Current version: 0.1.1-SNAPSHOT
+Current version: 0.2.0-SNAPSHOT
 
 Simple tool to merge several TCX (Training Centre XML) files, which is the standard format to track sport activities by Garmin, Fitbit, etc.
 
@@ -21,9 +21,9 @@ Important: if you were looking for a tool to "magically improve" your results so
     * ~~Indent output file.~~
     * ~~Ignore empty fields.~~
     * ~~Fix root element.~~
-7. Improve deserialization: 0.2.0-SNAPSHOT
+7. ~~Improve deserialization: 0.2.0-SNAPSHOT~~
     * ~~Case insensitive when reading literals<sup>(1)</sup>.~~
-    * Read `Creator` element<sup>(2)</sup>.
+    * ~~Read `Creator` element<sup>(2)</sup>.~~
 8. Tyding-up the code.
     * Check unit test coverage.
 

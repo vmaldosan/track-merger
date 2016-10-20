@@ -29,7 +29,7 @@ public class MergerServiceTest {
 	@Test
 	public void testDeserializeFile() {
 		TrainingCenterDatabaseT training = mergerService
-				.deserializeTrainingFile("src/test/resources/test.tcx");
+				.deserializeTrainingFile("src/test/resources/full_file.tcx");
 
 		assertNotNull("Null bean,", training);
 		assertEquals("Deserialized bean not from the expected class,", training.getClass(),
@@ -60,11 +60,11 @@ public class MergerServiceTest {
 	@Test
 	public void testGetLastValidDistance() {
 		TrainingCenterDatabaseT training = mergerService
-				.deserializeTrainingFile("src/test/resources/activity2.tcx");
+				.deserializeTrainingFile("src/test/resources/full_file.tcx");
 		assertNotNull("Null bean,", training);
 
 		double d = mergerService.getLastValidDistance(training);
-		assertEquals(1000.6800000000001d, d, 0d);
+		assertEquals(2838.3d, d, 0d);
 	}
 
 	@Test

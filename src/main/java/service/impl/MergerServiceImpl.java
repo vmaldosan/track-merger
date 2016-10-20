@@ -11,6 +11,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import service.MergerService;
+import utils.AbstractMixIn;
 import utils.Utils;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -26,10 +27,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
-import com.garmin.xmlschemas.trainingcenterdatabase.v2.ActivityLapT;
-import com.garmin.xmlschemas.trainingcenterdatabase.v2.ActivityT;
-import com.garmin.xmlschemas.trainingcenterdatabase.v2.TrackpointT;
-import com.garmin.xmlschemas.trainingcenterdatabase.v2.TrainingCenterDatabaseT;
+import com.garmin.xmlschemas.trainingcenterdatabase.v2.*;
 import com.sun.xml.internal.ws.util.StringUtils;
 
 public class MergerServiceImpl implements MergerService {
@@ -65,6 +63,9 @@ public class MergerServiceImpl implements MergerService {
 				jgen.writeString(StringUtils.capitalize(value.name().toLowerCase()));
 			}
 		});
+
+		// Extra non-JAXB annotations are needed to process abstract classes.
+		module.setMixInAnnotation(AbstractSourceT.class, AbstractMixIn.class);
 
 		mapper = new XmlMapper(module);
 
