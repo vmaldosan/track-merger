@@ -104,8 +104,8 @@ public class MergerServiceTest {
 	@Test
 	public void testMergeTcxFiles_defaultDest() {
 		List<String> fileNames = new ArrayList<>(2);
-		fileNames.add("activity1.tcx");
-		fileNames.add("activity2.tcx");
+		fileNames.add("src/test/resources/activity1.tcx");
+		fileNames.add("src/test/resources/activity2.tcx");
 
 		mergerService.mergeTcxFiles(fileNames, Utils.DEFAULT_DEST);
 
