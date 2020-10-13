@@ -7,7 +7,7 @@
 
 	<properties>
 		<version.jackson-dataformat-xml>2.7.8</version.jackson-dataformat-xml>
-		<version.junit>4.12</version.junit>
+		<version.junit>4.13.1</version.junit>
 	</properties>
 
 	<scm>
